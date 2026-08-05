@@ -1,6 +1,8 @@
 # Brand Perception Card Sort — Vercel deployment
 
-Same survey as the artifact version, but standalone: a static `index.html` plus one serverless API route (`api/responses.js`) backed by Vercel KV, so it works outside Claude.ai.
+`index.html` is the Claude Design "Classical" prototype (its `.dc.html` component format, renamed to `index.html` so Vercel serves it at `/`). `support.js` is its runtime, and it pulls React/ReactDOM from unpkg at load time, no build step needed. `_ds/` is the design system bundle (styles, tokens) the prototype depends on, keep it alongside `index.html`.
+
+Data goes through one serverless API route (`api/responses.js`) backed by Vercel KV. The prototype originally called `window.storage` (Claude's in-preview storage API, only available inside Claude.ai), that's been swapped for `fetch('/api/responses')` so it works standalone.
 
 ## Deploy
 
@@ -21,5 +23,6 @@ vercel dev
 ## Notes
 
 - `api/responses.js` handles both saving (`POST`) and reading (`GET`) responses. `GET` returns everything under the shared key set, there's no per-user scoping, this matches the "anyone with the link can see aggregate results" behavior from the artifact version.
-- Brand list is 8 (EU brands dropped per the latest scope). Edit the `BRANDS` array in `index.html` if that changes again, no other file needs to change.
+- Brand list is 8 (EU brands dropped per the latest scope). Edit the `BRANDS` array inside the `<script data-dc-script>` block in `index.html` if that changes again, no other file needs to change.
+- Don't rename or move the `_ds/` folder without also updating the two `<link>`/`<script>` paths near the top of `index.html` that point into it.
 - If you ever want to reset the study (start over with 0 responses), the simplest way is to delete and recreate the KV database in the Vercel dashboard, or open the KV data browser and clear keys prefixed `card-sort:`.

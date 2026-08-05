@@ -1,745 +1,450 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Brand Perception Survey</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
-    rel="stylesheet">
-  <style>
-    :root {
-      --bg: #14181c;
-      --panel: #1c2127;
-      --panel-alt: #262c33;
-      --line: #333b44;
-      --ink: #edeff2;
-      --ink-dim: #8b93a1;
-      --ink-faint: #5a6270;
-      --amber: #ffc33d;
-      --amber-dim: #8a6c1f;
-      --red: #e1483d;
-      --radius: 10px;
-      --display: 'Rajdhani', sans-serif;
-      --body: 'Inter', sans-serif;
-      --mono: 'IBM Plex Mono', monospace;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--ink);
-      font-family: var(--body);
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .app {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 28px 20px 60px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 22px;
-    }
-
-    .brand-mark {
-      font-family: var(--display);
-      font-weight: 700;
-      font-size: 15px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--ink-dim);
-    }
-
-    .brand-mark span {
-      color: var(--amber);
-    }
-
-    .results-link {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--ink-faint);
-      text-decoration: none;
-      letter-spacing: .03em;
-      border: 1px solid var(--line);
-      padding: 6px 10px;
-      border-radius: 6px;
-      transition: .15s;
-    }
-
-    .results-link:hover {
-      color: var(--amber);
-      border-color: var(--amber-dim);
-    }
-
-    .gauge {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 26px;
-    }
-
-    .gauge .tick {
-      flex: 1;
-      height: 6px;
-      background: var(--panel-alt);
-      border-radius: 2px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .gauge .tick.done::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--amber);
-    }
-
-    .gauge .tick.current::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--red);
-    }
-
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 28px;
-    }
-
-    h1 {
-      font-family: var(--display);
-      font-weight: 700;
-      font-size: 30px;
-      letter-spacing: .01em;
-      line-height: 1.15;
-    }
-
-    h2 {
-      font-family: var(--display);
-      font-weight: 600;
-      font-size: 22px;
-      color: var(--ink);
-    }
-
-    .eyebrow {
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--amber);
-      margin-bottom: 8px;
-    }
-
-    .lede {
-      color: var(--ink-dim);
-      font-size: 14.5px;
-      line-height: 1.6;
-      margin-top: 12px;
-    }
-
-    .btn {
-      font-family: var(--body);
-      font-weight: 600;
-      font-size: 14.5px;
-      background: var(--amber);
-      color: #1a1400;
-      border: none;
-      padding: 13px 22px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform .1s ease, filter .15s ease;
-    }
-
-    .btn:hover {
-      filter: brightness(1.08);
-    }
-
-    .btn:active {
-      transform: scale(.98);
-    }
-
-    .btn:disabled {
-      background: var(--panel-alt);
-      color: var(--ink-faint);
-      cursor: not-allowed;
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--ink-dim);
-      border: 1px solid var(--line);
-      font-family: var(--body);
-      font-size: 13.5px;
-      padding: 10px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .btn-ghost:hover {
-      border-color: var(--ink-faint);
-      color: var(--ink);
-    }
-
-    input[type=text] {
-      width: 100%;
-      background: var(--panel-alt);
-      border: 1px solid var(--line);
-      color: var(--ink);
-      font-family: var(--body);
-      font-size: 15px;
-      padding: 13px 14px;
-      border-radius: 8px;
-      margin-top: 16px;
-    }
-
-    input[type=text]:focus {
-      outline: 2px solid var(--amber-dim);
-    }
-
-    .podium {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      margin: 20px 0 22px;
-    }
-
-    .slot {
-      background: var(--panel-alt);
-      border: 1px dashed var(--line);
-      border-radius: 8px;
-      min-height: 74px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 8px;
-      cursor: default;
-      transition: .15s;
-      position: relative;
-    }
-
-    .slot .rank-label {
-      font-family: var(--mono);
-      font-size: 10px;
-      letter-spacing: .1em;
-      color: var(--ink-faint);
-      position: absolute;
-      top: 6px;
-      left: 8px;
-    }
-
-    .slot.filled {
-      border-style: solid;
-      border-color: var(--amber-dim);
-      cursor: pointer;
-      background: #20262c;
-    }
-
-    .slot .placeholder {
-      font-family: var(--mono);
-      font-size: 10.5px;
-      color: var(--ink-faint);
-      text-align: center;
-      padding-top: 6px;
-      letter-spacing: .03em;
-    }
-
-    .slot .brand-name {
-      font-family: var(--display);
-      font-weight: 700;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-
-    .slot .clear-x {
-      font-family: var(--mono);
-      font-size: 9px;
-      color: var(--ink-faint);
-      margin-top: 2px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .card {
-      background: var(--panel-alt);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 14px 14px;
-      cursor: pointer;
-      transition: .12s ease;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .card:hover {
-      border-color: var(--amber-dim);
-    }
-
-    .card.picked {
-      opacity: .35;
-      cursor: not-allowed;
-    }
-
-    .card .name {
-      font-family: var(--display);
-      font-weight: 600;
-      font-size: 16.5px;
-    }
-
-    .card .cat {
-      font-family: var(--mono);
-      font-size: 9.5px;
-      color: var(--ink-faint);
-      border: 1px solid var(--line);
-      padding: 2px 6px;
-      border-radius: 4px;
-      letter-spacing: .05em;
-    }
-
-    .footer-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 24px;
-    }
-
-    .round-count {
-      font-family: var(--mono);
-      font-size: 12px;
-      color: var(--ink-faint);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 14px;
-      font-size: 13px;
-    }
-
-    th,
-    td {
-      padding: 8px 6px;
-      border-bottom: 1px solid var(--line);
-      text-align: left;
-    }
-
-    th {
-      font-family: var(--mono);
-      font-size: 10.5px;
-      color: var(--ink-faint);
-      text-transform: uppercase;
-      letter-spacing: .05em;
-    }
-
-    td.attr {
-      font-family: var(--display);
-      font-weight: 600;
-      font-size: 14.5px;
-    }
-
-    td.score {
-      font-family: var(--mono);
-    }
-
-    .lead {
-      color: var(--amber);
-      font-weight: 600;
-    }
-
-    .strength-block {
-      margin-top: 10px;
-      padding: 14px 16px;
-      background: var(--panel-alt);
-      border-radius: 8px;
-      border: 1px solid var(--line);
-    }
-
-    .strength-block h3 {
-      font-family: var(--display);
-      font-size: 17px;
-      margin-bottom: 6px;
-    }
-
-    .strength-block ul {
-      list-style: none;
-      font-size: 13.5px;
-      color: var(--ink-dim);
-    }
-
-    .strength-block li {
-      padding: 3px 0;
-    }
-
-    .strength-block .margin {
-      color: var(--ink-faint);
-      font-family: var(--mono);
-      font-size: 11px;
-    }
-
-    .muted-note {
-      font-family: var(--mono);
-      font-size: 11.5px;
-      color: var(--ink-faint);
-      margin-top: 18px;
-      line-height: 1.6;
-    }
-
-    .toggle {
-      font-family: var(--mono);
-      font-size: 11.5px;
-      color: var(--amber);
-      background: none;
-      border: none;
-      cursor: pointer;
-      margin-top: 16px;
-      padding: 0;
-      text-decoration: underline;
-    }
-
-    @media (max-width:480px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      h1 {
-        font-size: 24px;
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
 </head>
-
 <body>
-  <div class="app" id="app"></div>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/classical-ba54453b-fcd6-4efa-8ce0-1748c9fcef50/styles.css">
+<script src="_ds/classical-ba54453b-fcd6-4efa-8ce0-1748c9fcef50/_ds_bundle.js"></script>
+<style>body{margin:0}</style>
+</helmet>
+<div style="max-width:720px;margin:0 auto;padding:var(--space-8) var(--space-4) var(--space-8);min-height:100vh;box-sizing:border-box;font-family:var(--font-body);color:var(--color-text);background:var(--color-bg)">
 
-  <script>
-    const ATTRIBUTES = [
-      { id: 'afford', name: 'Affordability', hint: 'Which brand gives the most car for the money?' },
-      { id: 'reliab', name: 'Reliability', hint: 'Jarang rewel, jarang masuk bengkel.' },
-      { id: 'aftersales', name: 'Aftersales & Spare Parts', hint: 'Sparepart gampang dicari & cepat datang.' },
-      { id: 'maint', name: 'Ease & Cost of Maintenance', hint: 'Servis rutin murah dan gampang.' },
-      { id: 'drive', name: 'Driving Experience', hint: 'Nyaman & enak dikendarai sehari-hari.' },
-      { id: 'design', name: 'Design & Status', hint: 'Desain yang bikin pede & terlihat prestige.' },
-      { id: 'resale', name: 'Resale Value', hint: 'Harga jual kembali tetap tinggi.' },
-      { id: 'fuel', name: 'Fuel / Energy Efficiency', hint: 'Irit BBM atau irit listrik.' },
-      { id: 'financing', name: 'Financing Accessibility', hint: 'DP ringan, cicilan gampang disetujui.' },
-      { id: 'network', name: 'Service Network Coverage', hint: 'Bengkel resmi tersebar luas.' },
-    ];
+<div class="nav" style="border-radius:var(--radius-md);margin-bottom:var(--space-6);padding:var(--space-3) var(--space-4)">
+  <div class="nav-brand" style="white-space:nowrap">Card Sort <span style="color:var(--color-accent-700);font-weight:400;font-size:15px">— Brand Perception</span></div>
+  <a href="#" onClick="{{onToResults}}" style="border:1px solid var(--color-divider);padding:6px 12px;border-radius:var(--radius-md);font-size:12px" style-hover="color:var(--color-accent-700);border-color:var(--color-accent)">Results →</a>
+</div>
 
-    const BRANDS = [
-      { id: 'hyundai', name: 'Hyundai', cat: 'EV' },
-      { id: 'kia', name: 'Kia', cat: 'EV' },
-      { id: 'byd', name: 'BYD', cat: 'EV' },
-      { id: 'wuling', name: 'Wuling', cat: 'EV' },
-      { id: 'jaecoo', name: 'Jaecoo', cat: 'EV' },
-      { id: 'toyota', name: 'Toyota', cat: 'ICE' },
-      { id: 'honda', name: 'Honda', cat: 'ICE' },
-      { id: 'mitsubishi', name: 'Mitsubishi', cat: 'ICE' },
-    ];
+<sc-if value="{{isWelcome}}" hint-placeholder-val="{{true}}">
+  <div class="card elev-sm" style="padding:var(--space-6)">
+    <div class="card-kicker">Round-based brand ranking</div>
+    <h1 style="margin-top:var(--space-2)">What actually wins, attribute by attribute.</h1>
+    <p style="opacity:.85;font-size:15px;margin-top:var(--space-3)">You'll go through {{totalRounds}} rounds. Each round names one thing that matters when buying a car in Indonesia — affordability, reliability, aftersales, and so on. You'll pick your top 3 brands for that one thing, in order. Ten brands, {{totalRounds}} rounds, no wrong answers.</p>
+    <button class="btn btn-primary" style="margin-top:var(--space-4)" onClick="{{onStart}}">Start</button>
+  </div>
+  <p class="text-muted" style="font-size:12px;margin-top:var(--space-4);line-height:1.6">Your picks are saved anonymously under whatever name or code you enter next. Aggregate results are visible to anyone with this link.</p>
+</sc-if>
 
-    const POINTS = [3, 2, 1];
+<sc-if value="{{isInfo}}" hint-placeholder-val="{{false}}">
+  <div class="card elev-sm" style="padding:var(--space-6)">
+    <div class="card-kicker">Before you begin</div>
+    <h2 style="margin-top:var(--space-2)">What should we call you?</h2>
+    <p style="opacity:.85;font-size:14px;margin-top:var(--space-2)">A first name or initials is enough. This just keeps your set of answers together.</p>
+    <input class="input" type="text" placeholder="e.g. Kenzie, or K.R." maxlength="40" style="margin-top:var(--space-4)" value="{{nameValue}}" onChange="{{onNameInput}}"></input>
+    <div style="display:flex;justify-content:flex-end;margin-top:var(--space-4)">
+      <button class="btn btn-primary" disabled="{{nameContinueDisabled}}" aria-disabled="{{nameContinueDisabled}}" onClick="{{onNameContinue}}">Continue</button>
+    </div>
+  </div>
+</sc-if>
 
-    let state = {
-      screen: 'welcome',
-      respondent: '',
-      roundIndex: 0,
-      picks: {},
+<sc-if value="{{isSurvey}}" hint-placeholder-val="{{false}}">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:var(--space-2)">
+    <div></div>
+    <div class="text-muted" style="font-size:12px;font-variant-numeric:tabular-nums">Round {{roundLabel}}</div>
+  </div>
+  <div style="display:flex;gap:4px;margin-bottom:var(--space-6)">
+    <sc-for list="{{gaugeTicks}}" as="tick" hint-placeholder-count="10">
+      <div style="{{tick.style}}"></div>
+    </sc-for>
+  </div>
+
+  <div class="card elev-sm" style="padding:var(--space-6)">
+    <div class="card-kicker">{{attrName}}</div>
+    <h2 style="margin-top:var(--space-2)">Rank your top 3 brands for this.</h2>
+    <p style="opacity:.85;font-size:14.5px;margin-top:var(--space-2)">{{attrHint}}</p>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-2);margin:var(--space-5) 0">
+      <sc-for list="{{podiumSlots}}" as="slot" hint-placeholder-count="3">
+        <div style="{{slot.style}}" onClick="{{slot.onClick}}">
+          <span style="position:absolute;top:6px;left:8px;font-size:10px;letter-spacing:.08em;color:var(--color-neutral-600);font-variant-numeric:tabular-nums">{{slot.label}}</span>
+          <sc-if value="{{slot.filled}}" hint-placeholder-val="{{false}}">
+            <div style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:16px;margin-top:12px">{{slot.brandName}}</div>
+            <div style="font-size:10px;color:var(--color-neutral-600);margin-top:2px">tap to remove</div>
+          </sc-if>
+          <sc-if value="{{slot.empty}}" hint-placeholder-val="{{true}}">
+            <div style="font-size:10.5px;color:var(--color-neutral-600);text-align:center;padding-top:8px;letter-spacing:.02em">Tap a card</div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:var(--space-2)">
+      <sc-for list="{{brandCards}}" as="card" hint-placeholder-count="10">
+        <div style="{{card.style}}" onClick="{{card.onClick}}">
+          <span style="font-family:var(--font-heading);font-weight:600;font-size:16px">{{card.name}}</span>
+          <span class="tag tag-outline">{{card.cat}}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:var(--space-6)">
+      <button class="btn btn-secondary" disabled="{{backDisabled}}" aria-disabled="{{backDisabled}}" onClick="{{onBack}}">Back</button>
+      <button class="btn btn-primary" disabled="{{nextDisabled}}" aria-disabled="{{nextDisabled}}" onClick="{{onNext}}">{{nextLabel}}</button>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{isSubmitting}}" hint-placeholder-val="{{false}}">
+  <div class="card elev-sm" style="padding:var(--space-6)">
+    <p style="font-size:15px">Saving your answers…</p>
+  </div>
+</sc-if>
+
+<sc-if value="{{isSubmitError}}" hint-placeholder-val="{{false}}">
+  <div class="card elev-sm" style="padding:var(--space-6)">
+    <p style="font-size:15px">{{submitErrorMessage}}</p>
+    <button class="btn btn-primary" style="margin-top:var(--space-4)" onClick="{{onRetry}}">Retry</button>
+  </div>
+</sc-if>
+
+<sc-if value="{{isComplete}}" hint-placeholder-val="{{false}}">
+  <div class="card elev-sm" style="padding:var(--space-6)">
+    <div class="card-kicker">Done</div>
+    <h1 style="margin-top:var(--space-2)">Thanks, {{respondentName}}.</h1>
+    <p style="opacity:.85;font-size:15px;margin-top:var(--space-2)">Your {{totalRounds}} rounds are saved. You can view how everyone's answers stack up so far.</p>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:var(--space-5)">
+      <button class="btn btn-secondary" onClick="{{onRestart}}">Take again</button>
+      <button class="btn btn-primary" onClick="{{onSeeResults}}">View results</button>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{isResults}}" hint-placeholder-val="{{false}}">
+  <sc-if value="{{resultsLoading}}" hint-placeholder-val="{{true}}">
+    <div class="card elev-sm" style="padding:var(--space-6)"><p style="font-size:15px">Loading responses…</p></div>
+  </sc-if>
+  <sc-if value="{{resultsReady}}" hint-placeholder-val="{{false}}">
+    <div class="card elev-sm" style="padding:var(--space-6)">
+      <div class="card-kicker">{{responseCountLabel}}</div>
+      <h2 style="margin-top:var(--space-2)">Leader per attribute</h2>
+      <table class="table" style="margin-top:var(--space-3)">
+        <thead><tr><th>Attribute</th><th>Top 3 (weighted score)</th></tr></thead>
+        <tbody>
+          <sc-for list="{{attrRows}}" as="row" hint-placeholder-count="10">
+            <tr>
+              <td style="font-family:var(--font-heading);font-weight:600;font-size:14.5px">{{row.name}}</td>
+              <td style="font-variant-numeric:tabular-nums;font-size:13px">
+                <sc-for list="{{row.top3}}" as="item" hint-placeholder-count="3">
+                  <span style="{{item.style}}">{{item.sep}}{{item.text}}</span>
+                </sc-for>
+              </td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+      <button class="btn btn-ghost" style="margin-top:var(--space-4);padding-inline:0" onClick="{{onToggleTable}}">{{toggleTableLabel}}</button>
+      <sc-if value="{{showFullTable}}" hint-placeholder-val="{{false}}">
+        <div style="overflow-x:auto;margin-top:var(--space-3)">
+          <table class="table" style="min-width:640px">
+            <thead>
+              <tr><th>Attribute</th>
+                <sc-for list="{{brandHeaders}}" as="bh" hint-placeholder-count="10">
+                  <th style="font-variant-numeric:tabular-nums">{{bh.name}}</th>
+                </sc-for>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{fullTableRows}}" as="row" hint-placeholder-count="10">
+                <tr>
+                  <td style="font-family:var(--font-heading);font-weight:600;font-size:13.5px">{{row.name}}</td>
+                  <sc-for list="{{row.cells}}" as="cell" hint-placeholder-count="10">
+                    <td style="font-variant-numeric:tabular-nums;font-size:13px">{{cell.score}}</td>
+                  </sc-for>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </sc-if>
+    </div>
+
+    <h2 style="margin:var(--space-8) 0 var(--space-1)">Key strengths by brand</h2>
+    <p style="opacity:.8;font-size:14px;margin-bottom:var(--space-3)">Attributes where a brand leads outright — the strongest candidates for a narrative-driven campaign angle.</p>
+    <sc-if value="{{hasStrengths}}" hint-placeholder-val="{{false}}">
+      <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+        <sc-for list="{{strengthBlocks}}" as="blk" hint-placeholder-count="3">
+          <div class="card" style="padding:var(--space-4)">
+            <h3 style="margin:0 0 var(--space-2)">{{blk.brandName}}</h3>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <sc-for list="{{blk.items}}" as="it" hint-placeholder-count="3">
+                <div style="font-size:13.5px;opacity:.85">{{it.attrName}} <span class="text-muted" style="font-size:11px;font-variant-numeric:tabular-nums">(led by {{it.marginText}})</span></div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{noStrengths}}" hint-placeholder-val="{{false}}">
+      <p class="text-muted" style="font-size:14px">Not enough data yet.</p>
+    </sc-if>
+
+    <p class="text-muted" style="font-size:11.5px;margin-top:var(--space-6);line-height:1.6">Scoring: rank 1 = 3 pts, rank 2 = 2 pts, rank 3 = 1 pt, summed across respondents. With a pool this size (target n=6), treat margins under 2–3 points as noise, not signal — use this to shortlist directional strengths, not to publish as statistically significant.</p>
+  </sc-if>
+</sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const ATTRIBUTES = [
+  {id:'afford', name:'Affordability', hint:'Which brand gives the most car for the money?'},
+  {id:'reliab', name:'Reliability', hint:'Jarang rewel, jarang masuk bengkel.'},
+  {id:'aftersales', name:'Aftersales & Spare Parts', hint:'Sparepart gampang dicari & cepat datang.'},
+  {id:'maint', name:'Ease & Cost of Maintenance', hint:'Servis rutin murah dan gampang.'},
+  {id:'drive', name:'Driving Experience', hint:'Nyaman & enak dikendarai sehari-hari.'},
+  {id:'design', name:'Design & Status', hint:'Desain yang bikin pede & terlihat prestige.'},
+  {id:'resale', name:'Resale Value', hint:'Harga jual kembali tetap tinggi.'},
+  {id:'fuel', name:'Fuel / Energy Efficiency', hint:'Irit BBM atau irit listrik.'},
+  {id:'financing', name:'Financing Accessibility', hint:'DP ringan, cicilan gampang disetujui.'},
+  {id:'network', name:'Service Network Coverage', hint:'Bengkel resmi tersebar luas.'},
+];
+
+const BRANDS = [
+  {id:'hyundai', name:'Hyundai', cat:'EV'},
+  {id:'kia', name:'Kia', cat:'EV'},
+  {id:'byd', name:'BYD', cat:'EV'},
+  {id:'wuling', name:'Wuling', cat:'EV'},
+  {id:'jaecoo', name:'Jaecoo', cat:'EV'},
+  {id:'toyota', name:'Toyota', cat:'ICE'},
+  {id:'honda', name:'Honda', cat:'ICE'},
+  {id:'mitsubishi', name:'Mitsubishi', cat:'ICE'},
+];
+
+const POINTS = [3,2,1];
+
+class Component extends DCLogic {
+  state = {
+    screen: 'welcome',
+    respondent: '',
+    roundIndex: 0,
+    picks: {},
+    submitting: false,
+    submitError: null,
+    resultsLoading: false,
+    responses: [],
+    showFullTable: false,
+  };
+
+  shuffledBrands(seed) {
+    const arr = [...BRANDS];
+    let s = seed;
+    for (let i = arr.length - 1; i > 0; i--) {
+      s = (s * 9301 + 49297) % 233280;
+      const j = Math.floor((s / 233280) * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  onStart = () => this.setState({ screen: 'info' });
+  onNameInput = (e) => this.setState({ respondent: e.target.value });
+  onNameContinue = () => {
+    if (!this.state.respondent.trim()) return;
+    this.setState({ screen: 'survey', roundIndex: 0, picks: {} });
+  };
+
+  selectBrand(attrId, brandId) {
+    const picks = this.state.picks[attrId] || [];
+    if (picks.includes(brandId) || picks.length >= 3) return;
+    this.setState({ picks: { ...this.state.picks, [attrId]: [...picks, brandId] } });
+  }
+  removePick(attrId, idx) {
+    const picks = [...(this.state.picks[attrId] || [])];
+    picks.splice(idx, 1);
+    this.setState({ picks: { ...this.state.picks, [attrId]: picks } });
+  }
+
+  onBack = () => { if (this.state.roundIndex > 0) this.setState({ roundIndex: this.state.roundIndex - 1 }); };
+  onNext = async () => {
+    const attr = ATTRIBUTES[this.state.roundIndex];
+    if ((this.state.picks[attr.id] || []).length < 3) return;
+    if (this.state.roundIndex < ATTRIBUTES.length - 1) {
+      this.setState({ roundIndex: this.state.roundIndex + 1 });
+    } else {
+      await this.submitResponse();
+    }
+  };
+
+  submitResponse = async () => {
+    this.setState({ screen: 'submitting', submitError: null });
+    try {
+      const res = await fetch('/api/responses', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: this.state.respondent, picks: this.state.picks }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || ('Request failed (' + res.status + ')'));
+      }
+      this.setState({ screen: 'complete' });
+    } catch (e) {
+      this.setState({ screen: 'submiterror', submitError: "Couldn't save your answers (" + (e.message || 'unknown error') + "). Please try again." });
+    }
+  };
+  onRetry = () => this.submitResponse();
+
+  onRestart = () => this.setState({ screen: 'welcome', respondent: '', roundIndex: 0, picks: {} });
+  onSeeResults = () => this.loadResults();
+  onToResults = (e) => { e.preventDefault(); this.loadResults(); };
+
+  loadResults = async () => {
+    this.setState({ screen: 'results', resultsLoading: true, showFullTable: false });
+    let responses = [];
+    try {
+      const res = await fetch('/api/responses');
+      if (res.ok) {
+        const body = await res.json();
+        responses = body.responses || [];
+      }
+    } catch (e) { responses = []; }
+    this.setState({ responses, resultsLoading: false });
+  };
+
+  onToggleTable = () => this.setState({ showFullTable: !this.state.showFullTable });
+
+  computeScores() {
+    const scores = {};
+    ATTRIBUTES.forEach(a => { scores[a.id] = {}; BRANDS.forEach(b => { scores[a.id][b.id] = 0; }); });
+    this.state.responses.forEach(r => {
+      ATTRIBUTES.forEach(a => {
+        const picks = (r.picks && r.picks[a.id]) || [];
+        picks.forEach((bId, i) => { if (scores[a.id][bId] !== undefined) scores[a.id][bId] += POINTS[i]; });
+      });
+    });
+    return scores;
+  }
+
+  tickStyle(state) {
+    const base = 'flex:1;height:6px;border-radius:var(--radius-sm);';
+    if (state === 'done') return base + 'background:var(--color-accent-500);';
+    if (state === 'current') return base + 'background:transparent;border:1.5px solid var(--color-accent-600);box-sizing:border-box;';
+    return base + 'background:var(--color-neutral-200);';
+  }
+  slotStyle(filled) {
+    const base = 'border-radius:var(--radius-md);min-height:76px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:var(--space-2);position:relative;box-sizing:border-box;';
+    if (filled) return base + 'border:1px solid var(--color-accent);cursor:pointer;background:color-mix(in srgb, var(--color-accent) 6%, transparent);';
+    return base + 'border:1px dashed var(--color-divider);background:transparent;cursor:default;';
+  }
+  cardStyle(picked) {
+    const base = 'display:flex;align-items:center;justify-content:space-between;padding:var(--space-3);border:1px solid var(--color-divider);border-radius:var(--radius-md);';
+    if (picked) return base + 'opacity:.4;cursor:not-allowed;';
+    return base + 'cursor:pointer;';
+  }
+
+  renderVals() {
+    const s = this.state;
+    const isWelcome = s.screen === 'welcome';
+    const isInfo = s.screen === 'info';
+    const isSurvey = s.screen === 'survey';
+    const isSubmitting = s.screen === 'submitting';
+    const isSubmitError = s.screen === 'submiterror';
+    const isComplete = s.screen === 'complete';
+    const isResults = s.screen === 'results';
+
+    const vals = {
+      isWelcome, isInfo, isSurvey, isSubmitting, isSubmitError, isComplete, isResults,
+      totalRounds: ATTRIBUTES.length,
+      onStart: this.onStart, onToResults: this.onToResults,
+      nameValue: s.respondent, onNameInput: this.onNameInput,
+      nameContinueDisabled: s.respondent.trim().length === 0, onNameContinue: this.onNameContinue,
+      submitErrorMessage: s.submitError, onRetry: this.onRetry,
+      respondentName: s.respondent, onRestart: this.onRestart, onSeeResults: this.onSeeResults,
     };
 
-    const app = document.getElementById('app');
-
-    function shuffledBrands(seed) {
-      const arr = [...BRANDS];
-      let s = seed;
-      for (let i = arr.length - 1; i > 0; i--) {
-        s = (s * 9301 + 49297) % 233280;
-        const j = Math.floor((s / 233280) * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
-    }
-
-    function render() {
-      if (state.screen === 'welcome') return renderWelcome();
-      if (state.screen === 'info') return renderInfo();
-      if (state.screen === 'survey') return renderSurvey();
-      if (state.screen === 'complete') return renderComplete();
-      if (state.screen === 'results') return renderResults();
-    }
-
-    function renderWelcome() {
-      app.innerHTML = `
-    <div class="top">
-      <div class="brand-mark">CARD<span>SORT</span> // AUTO PERCEPTION</div>
-      <a class="results-link" href="#" id="toResults">VIEW RESULTS →</a>
-    </div>
-    <div class="panel">
-      <div class="eyebrow">Round-based brand ranking</div>
-      <h1>What actually wins, attribute by attribute.</h1>
-      <p class="lede">You'll go through ${ATTRIBUTES.length} rounds. Each round names one thing that matters when buying a car in Indonesia. Pick your top 3 brands for that one thing, in order. ${BRANDS.length} brands, ${ATTRIBUTES.length} rounds, no wrong answers.</p>
-      <button class="btn" style="margin-top:22px" id="start">Start</button>
-    </div>
-    <p class="muted-note">Your picks are saved under whatever name or code you enter next. Aggregate results are visible to anyone with this link.</p>
-  `;
-      document.getElementById('start').onclick = () => { state.screen = 'info'; render(); };
-      document.getElementById('toResults').onclick = (e) => { e.preventDefault(); state.screen = 'results'; render(); };
-    }
-
-    function renderInfo() {
-      app.innerHTML = `
-    <div class="top"><div class="brand-mark">CARD<span>SORT</span></div><div></div></div>
-    <div class="panel">
-      <div class="eyebrow">Before you begin</div>
-      <h2>What should we call you?</h2>
-      <p class="lede">A first name or initials is enough. This just keeps your set of answers together.</p>
-      <input type="text" id="nameInput" placeholder="e.g. Kenzie, or K.R." maxlength="40">
-      <div class="footer-row">
-        <span></span>
-        <button class="btn" id="continueBtn" disabled>Continue</button>
-      </div>
-    </div>
-  `;
-      const inp = document.getElementById('nameInput');
-      const btn = document.getElementById('continueBtn');
-      inp.oninput = () => { btn.disabled = inp.value.trim().length === 0; };
-      inp.focus();
-      btn.onclick = () => {
-        state.respondent = inp.value.trim();
-        state.roundIndex = 0;
-        state.picks = {};
-        state.screen = 'survey';
-        render();
-      };
-    }
-
-    function renderSurvey() {
-      const attr = ATTRIBUTES[state.roundIndex];
-      const order = shuffledBrands(attr.id.length + state.roundIndex + state.respondent.length);
-      const currentPicks = state.picks[attr.id] || [];
-
-      const gaugeHtml = ATTRIBUTES.map((a, i) => {
-        let cls = '';
-        if (i < state.roundIndex) cls = 'done';
-        else if (i === state.roundIndex) cls = 'current';
-        return `<div class="tick ${cls}"></div>`;
-      }).join('');
-
-      const podiumHtml = [0, 1, 2].map(i => {
+    if (isSurvey) {
+      const attr = ATTRIBUTES[s.roundIndex];
+      const order = this.shuffledBrands(attr.id.length + s.roundIndex + s.respondent.length);
+      const currentPicks = s.picks[attr.id] || [];
+      vals.attrName = attr.name;
+      vals.attrHint = attr.hint;
+      vals.roundLabel = (s.roundIndex + 1) + ' / ' + ATTRIBUTES.length;
+      vals.gaugeTicks = ATTRIBUTES.map((a, i) => {
+        const st = i < s.roundIndex ? 'done' : (i === s.roundIndex ? 'current' : 'upcoming');
+        return { key: a.id, style: this.tickStyle(st) };
+      });
+      vals.podiumSlots = [0, 1, 2].map(i => {
         const bId = currentPicks[i];
-        if (!bId) {
-          return `<div class="slot"><span class="rank-label">P${i + 1}</span><div class="placeholder">TAP A<br>CARD</div></div>`;
-        }
-        const b = BRANDS.find(x => x.id === bId);
-        return `<div class="slot filled" data-slotidx="${i}"><span class="rank-label">P${i + 1}</span><div class="brand-name">${b.name}</div><div class="clear-x">tap to remove</div></div>`;
-      }).join('');
-
-      const gridHtml = order.map(b => {
+        const b = bId ? BRANDS.find(x => x.id === bId) : null;
+        return {
+          key: 'slot' + i, label: 'P' + (i + 1), filled: !!b, empty: !b,
+          brandName: b ? b.name : '', style: this.slotStyle(!!b),
+          onClick: b ? (() => this.removePick(attr.id, i)) : undefined,
+        };
+      });
+      vals.brandCards = order.map(b => {
         const picked = currentPicks.includes(b.id);
-        return `<div class="card ${picked ? 'picked' : ''}" data-brandid="${b.id}">
-      <span class="name">${b.name}</span>
-      <span class="cat">${b.cat}</span>
-    </div>`;
-      }).join('');
-
-      app.innerHTML = `
-    <div class="top">
-      <div class="brand-mark">CARD<span>SORT</span></div>
-      <span class="round-count">ROUND ${state.roundIndex + 1} / ${ATTRIBUTES.length}</span>
-    </div>
-    <div class="gauge">${gaugeHtml}</div>
-    <div class="panel">
-      <div class="eyebrow">${attr.name}</div>
-      <h2>Rank your top 3 brands for this.</h2>
-      <p class="lede">${attr.hint}</p>
-      <div class="podium">${podiumHtml}</div>
-      <div class="grid">${gridHtml}</div>
-      <div class="footer-row">
-        <button class="btn-ghost" id="backBtn" ${state.roundIndex === 0 ? 'disabled' : ''}>Back</button>
-        <button class="btn" id="nextBtn" ${currentPicks.length < 3 ? 'disabled' : ''}>${state.roundIndex === ATTRIBUTES.length - 1 ? 'Finish' : 'Next round'}</button>
-      </div>
-    </div>
-  `;
-
-      document.querySelectorAll('.card').forEach(card => {
-        card.onclick = () => {
-          const id = card.dataset.brandid;
-          const picks = state.picks[attr.id] || [];
-          if (picks.includes(id) || picks.length >= 3) return;
-          state.picks[attr.id] = [...picks, id];
-          render();
-        };
+        return { key: b.id, name: b.name, cat: b.cat, style: this.cardStyle(picked), onClick: picked ? undefined : (() => this.selectBrand(attr.id, b.id)) };
       });
-      document.querySelectorAll('.slot.filled').forEach(slot => {
-        slot.onclick = () => {
-          const idx = parseInt(slot.dataset.slotidx);
-          const picks = [...(state.picks[attr.id] || [])];
-          picks.splice(idx, 1);
-          state.picks[attr.id] = picks;
-          render();
-        };
-      });
-      document.getElementById('backBtn').onclick = () => {
-        if (state.roundIndex > 0) { state.roundIndex--; render(); }
-      };
-      document.getElementById('nextBtn').onclick = async () => {
-        if ((state.picks[attr.id] || []).length < 3) return;
-        if (state.roundIndex < ATTRIBUTES.length - 1) {
-          state.roundIndex++;
-          render();
-        } else {
-          await submitResponse();
-        }
-      };
+      vals.backDisabled = s.roundIndex === 0;
+      vals.onBack = this.onBack;
+      vals.nextDisabled = currentPicks.length < 3;
+      vals.nextLabel = s.roundIndex === ATTRIBUTES.length - 1 ? 'Finish' : 'Next round';
+      vals.onNext = this.onNext;
     }
 
-    async function submitResponse() {
-      app.innerHTML = `<div class="panel"><p class="lede">Saving your answers…</p></div>`;
-      try {
-        const res = await fetch('/api/responses', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: state.respondent, picks: state.picks })
-        });
-        if (!res.ok) {
-          const body = await res.json().catch(() => ({}));
-          throw new Error(body.error || `Request failed (${res.status})`);
-        }
-        state.screen = 'complete';
-        render();
-      } catch (e) {
-        app.innerHTML = `<div class="panel"><p class="lede">Couldn't save your answers (${e.message || 'unknown error'}). Please try again.</p><button class="btn" id="retry" style="margin-top:16px">Retry</button></div>`;
-        document.getElementById('retry').onclick = submitResponse;
-      }
-    }
+    if (isResults) {
+      vals.resultsLoading = s.resultsLoading;
+      vals.resultsReady = !s.resultsLoading;
+      const responses = s.responses;
+      vals.responseCountLabel = responses.length + ' response' + (responses.length === 1 ? '' : 's') + ' collected';
+      const scores = this.computeScores();
+      const hasResponses = responses.length > 0;
 
-    function renderComplete() {
-      app.innerHTML = `
-    <div class="top"><div class="brand-mark">CARD<span>SORT</span></div><div></div></div>
-    <div class="panel">
-      <div class="eyebrow">Done</div>
-      <h1>Thanks, ${state.respondent}.</h1>
-      <p class="lede">Your ${ATTRIBUTES.length} rounds are saved. You can view how everyone's answers stack up so far.</p>
-      <div class="footer-row">
-        <button class="btn-ghost" id="restart">Take again</button>
-        <button class="btn" id="seeResults">View results</button>
-      </div>
-    </div>
-  `;
-      document.getElementById('restart').onclick = () => { state.screen = 'welcome'; render(); };
-      document.getElementById('seeResults').onclick = () => { state.screen = 'results'; render(); };
-    }
-
-    async function renderResults() {
-      app.innerHTML = `
-    <div class="top"><div class="brand-mark">CARD<span>SORT</span></div><a class="results-link" href="#" id="backHome">← BACK</a></div>
-    <div class="panel"><p class="lede">Loading responses…</p></div>
-  `;
-      document.getElementById('backHome').onclick = (e) => { e.preventDefault(); state.screen = 'welcome'; render(); };
-
-      let responses = [];
-      try {
-        const res = await fetch('/api/responses');
-        if (res.ok) {
-          const body = await res.json();
-          responses = body.responses || [];
-        }
-      } catch (e) {
-        responses = [];
-      }
-
-      const scores = {};
-      ATTRIBUTES.forEach(a => { scores[a.id] = {}; BRANDS.forEach(b => { scores[a.id][b.id] = 0; }); });
-      responses.forEach(r => {
-        ATTRIBUTES.forEach(a => {
-          const picks = (r.picks && r.picks[a.id]) || [];
-          picks.forEach((bId, i) => {
-            if (scores[a.id][bId] !== undefined) scores[a.id][bId] += POINTS[i];
-          });
-        });
-      });
-
-      const attrRows = ATTRIBUTES.map(a => {
+      vals.attrRows = ATTRIBUTES.map(a => {
         const ranked = BRANDS.map(b => ({ b, score: scores[a.id][b.id] })).sort((x, y) => y.score - x.score);
-        return { attr: a, ranked };
+        let top3;
+        if (!hasResponses) {
+          top3 = [{ key: a.id + '-none', text: 'No responses yet', sep: '', style: 'color:var(--color-neutral-600)' }];
+        } else {
+          top3 = ranked.slice(0, 3).map((r, i) => {
+            const isLead = i === 0 && r.score > 0 && r.score > ranked[1].score;
+            return { key: a.id + i, text: r.b.name + ' (' + r.score + ')', sep: i === 0 ? '' : ' · ', style: isLead ? 'color:var(--color-accent-700);font-weight:600' : '' };
+          });
+        }
+        return { key: a.id, name: a.name, top3 };
       });
+
+      vals.brandHeaders = BRANDS.map(b => ({ key: b.id, name: b.name }));
+      vals.fullTableRows = ATTRIBUTES.map(a => ({
+        key: a.id, name: a.name,
+        cells: BRANDS.map(b => ({ key: b.id, score: scores[a.id][b.id] })),
+      }));
+      vals.showFullTable = s.showFullTable;
+      vals.toggleTableLabel = s.showFullTable ? 'Hide full score matrix' : 'Show full score matrix';
+      vals.onToggleTable = this.onToggleTable;
 
       const strengths = {};
       BRANDS.forEach(b => strengths[b.id] = []);
-      attrRows.forEach(({ attr, ranked }) => {
-        const top = ranked[0];
-        const second = ranked[1];
+      vals.attrRows.forEach((row, idx) => {
+        const a = ATTRIBUTES[idx];
+        const ranked = BRANDS.map(b => ({ b, score: scores[a.id][b.id] })).sort((x, y) => y.score - x.score);
+        const top = ranked[0], second = ranked[1];
         if (top.score > 0 && top.score > second.score) {
-          strengths[top.b.id].push({ attr: attr.name, margin: top.score - second.score, score: top.score });
+          strengths[top.b.id].push({ attr: a.name, margin: top.score - second.score });
         }
       });
-
-      const topRowsHtml = attrRows.map(({ attr, ranked }) => {
-        const top3 = ranked.slice(0, 3).map((r, i) => `<span class="${i === 0 ? 'lead' : ''}">${r.b.name} (${r.score})</span>`).join(' · ');
-        return `<tr><td class="attr">${attr.name}</td><td class="score">${top3}</td></tr>`;
-      }).join('');
-
       const strengthBlocks = BRANDS.map(b => {
-        const list = strengths[b.id].sort((x, y) => y.margin - x.margin);
-        if (list.length === 0) return '';
-        const items = list.map(s => `<li>${s.attr} <span class="margin">(led by ${s.margin} pt${s.margin === 1 ? '' : 's'})</span></li>`).join('');
-        return `<div class="strength-block"><h3>${b.name}</h3><ul>${items}</ul></div>`;
-      }).join('');
-
-      const fullTableHtml = `
-    <table id="fullTable" style="display:none">
-      <thead><tr><th>Attribute</th>${BRANDS.map(b => `<th>${b.name}</th>`).join('')}</tr></thead>
-      <tbody>
-        ${ATTRIBUTES.map(a => `<tr><td class="attr">${a.name}</td>${BRANDS.map(b => `<td class="score">${scores[a.id][b.id]}</td>`).join('')}</tr>`).join('')}
-      </tbody>
-    </table>
-  `;
-
-      app.innerHTML = `
-    <div class="top"><div class="brand-mark">CARD<span>SORT</span></div><a class="results-link" href="#" id="backHome2">← BACK</a></div>
-    <div class="panel">
-      <div class="eyebrow">${responses.length} response${responses.length === 1 ? '' : 's'} collected</div>
-      <h2>Leader per attribute</h2>
-      <table><thead><tr><th>Attribute</th><th>Top 3 (weighted score)</th></tr></thead><tbody>${topRowsHtml || '<tr><td colspan="2">No responses yet.</td></tr>'}</tbody></table>
-      <button class="toggle" id="toggleTable">Show full score matrix</button>
-      ${fullTableHtml}
-    </div>
-    <h2 style="margin:26px 0 6px">Key strengths by brand</h2>
-    <p class="lede" style="margin-bottom:6px">Attributes where a brand leads outright, i.e. the strongest candidates for a narrative-driven campaign angle.</p>
-    ${strengthBlocks || '<p class="lede">Not enough data yet.</p>'}
-    <p class="muted-note">Scoring: rank 1 = 3 pts, rank 2 = 2 pts, rank 3 = 1 pt, summed across respondents. With a pool this size (target n=6), treat margins under 2–3 points as noise, not signal.</p>
-  `;
-      document.getElementById('backHome2').onclick = (e) => { e.preventDefault(); state.screen = 'welcome'; render(); };
-      document.getElementById('toggleTable').onclick = () => {
-        const t = document.getElementById('fullTable');
-        const btn = document.getElementById('toggleTable');
-        if (t.style.display === 'none') { t.style.display = 'table'; btn.textContent = 'Hide full score matrix'; }
-        else { t.style.display = 'none'; btn.textContent = 'Show full score matrix'; }
-      };
+        const list = strengths[b.id].slice().sort((x, y) => y.margin - x.margin);
+        if (list.length === 0) return null;
+        return {
+          key: b.id, brandName: b.name,
+          items: list.map((it, i) => ({ key: b.id + i, attrName: it.attr, marginText: it.margin + ' pt' + (it.margin === 1 ? '' : 's') })),
+        };
+      }).filter(Boolean);
+      vals.strengthBlocks = strengthBlocks;
+      vals.hasStrengths = strengthBlocks.length > 0;
+      vals.noStrengths = strengthBlocks.length === 0;
     }
 
-    render();
-  </script>
-</body>
+    return vals;
+  }
+}
 
+</script>
+</body>
 </html>
