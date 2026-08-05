@@ -1,195 +1,237 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="./support.js"></script>
 </head>
+
 <body>
-<x-dc>
-<helmet>
-<link rel="stylesheet" href="_ds/classical-ba54453b-fcd6-4efa-8ce0-1748c9fcef50/styles.css">
-<script src="_ds/classical-ba54453b-fcd6-4efa-8ce0-1748c9fcef50/_ds_bundle.js"></script>
-<style>body{margin:0}</style>
-</helmet>
-<div style="max-width:720px;margin:0 auto;padding:var(--space-8) var(--space-4) var(--space-8);min-height:100vh;box-sizing:border-box;font-family:var(--font-body);color:var(--color-text);background:var(--color-bg)">
+  <x-dc>
+    <helmet>
+      <link rel="stylesheet" href="_ds/classical-ba54453b-fcd6-4efa-8ce0-1748c9fcef50/styles.css">
+      <script src="_ds/classical-ba54453b-fcd6-4efa-8ce0-1748c9fcef50/_ds_bundle.js"></script>
+      <style>
+        body {
+          margin: 0
+        }
+      </style>
+    </helmet>
+    <div
+      style="max-width:720px;margin:0 auto;padding:var(--space-8) var(--space-4) var(--space-8);min-height:100vh;box-sizing:border-box;font-family:var(--font-body);color:var(--color-text);background:var(--color-bg)">
 
-<div class="nav" style="border-radius:var(--radius-md);margin-bottom:var(--space-6);padding:var(--space-3) var(--space-4)">
-  <div class="nav-brand" style="white-space:nowrap">Card Sort <span style="color:var(--color-accent-700);font-weight:400;font-size:15px">— Brand Perception</span></div>
-  <a href="#" onClick="{{onToResults}}" style="border:1px solid var(--color-divider);padding:6px 12px;border-radius:var(--radius-md);font-size:12px" style-hover="color:var(--color-accent-700);border-color:var(--color-accent)">Results →</a>
-</div>
+      <div class="nav"
+        style="border-radius:var(--radius-md);margin-bottom:var(--space-6);padding:var(--space-3) var(--space-4)">
+        <div class="nav-brand" style="white-space:nowrap">Card Sort <span
+            style="color:var(--color-accent-700);font-weight:400;font-size:15px">— Brand Perception</span></div>
+        <a href="#" onClick="{{onToResults}}"
+          style="border:1px solid var(--color-divider);padding:6px 12px;border-radius:var(--radius-md);font-size:12px"
+          style-hover="color:var(--color-accent-700);border-color:var(--color-accent)">Results →</a>
+      </div>
 
-<sc-if value="{{isWelcome}}" hint-placeholder-val="{{true}}">
-  <div class="card elev-sm" style="padding:var(--space-6)">
-    <div class="card-kicker">Round-based brand ranking</div>
-    <h1 style="margin-top:var(--space-2)">What actually wins, attribute by attribute.</h1>
-    <p style="opacity:.85;font-size:15px;margin-top:var(--space-3)">You'll go through {{totalRounds}} rounds. Each round names one thing that matters when buying a car in Indonesia — affordability, reliability, aftersales, and so on. You'll pick your top 3 brands for that one thing, in order. Ten brands, {{totalRounds}} rounds, no wrong answers.</p>
-    <button class="btn btn-primary" style="margin-top:var(--space-4)" onClick="{{onStart}}">Start</button>
-  </div>
-  <p class="text-muted" style="font-size:12px;margin-top:var(--space-4);line-height:1.6">Your picks are saved anonymously under whatever name or code you enter next. Aggregate results are visible to anyone with this link.</p>
-</sc-if>
-
-<sc-if value="{{isInfo}}" hint-placeholder-val="{{false}}">
-  <div class="card elev-sm" style="padding:var(--space-6)">
-    <div class="card-kicker">Before you begin</div>
-    <h2 style="margin-top:var(--space-2)">What should we call you?</h2>
-    <p style="opacity:.85;font-size:14px;margin-top:var(--space-2)">A first name or initials is enough. This just keeps your set of answers together.</p>
-    <input class="input" type="text" placeholder="e.g. Kenzie, or K.R." maxlength="40" style="margin-top:var(--space-4)" value="{{nameValue}}" onChange="{{onNameInput}}"></input>
-    <div style="display:flex;justify-content:flex-end;margin-top:var(--space-4)">
-      <button class="btn btn-primary" disabled="{{nameContinueDisabled}}" aria-disabled="{{nameContinueDisabled}}" onClick="{{onNameContinue}}">Continue</button>
-    </div>
-  </div>
-</sc-if>
-
-<sc-if value="{{isSurvey}}" hint-placeholder-val="{{false}}">
-  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:var(--space-2)">
-    <div></div>
-    <div class="text-muted" style="font-size:12px;font-variant-numeric:tabular-nums">Round {{roundLabel}}</div>
-  </div>
-  <div style="display:flex;gap:4px;margin-bottom:var(--space-6)">
-    <sc-for list="{{gaugeTicks}}" as="tick" hint-placeholder-count="10">
-      <div style="{{tick.style}}"></div>
-    </sc-for>
-  </div>
-
-  <div class="card elev-sm" style="padding:var(--space-6)">
-    <div class="card-kicker">{{attrName}}</div>
-    <h2 style="margin-top:var(--space-2)">Rank your top 3 brands for this.</h2>
-    <p style="opacity:.85;font-size:14.5px;margin-top:var(--space-2)">{{attrHint}}</p>
-
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-2);margin:var(--space-5) 0">
-      <sc-for list="{{podiumSlots}}" as="slot" hint-placeholder-count="3">
-        <div style="{{slot.style}}" onClick="{{slot.onClick}}">
-          <span style="position:absolute;top:6px;left:8px;font-size:10px;letter-spacing:.08em;color:var(--color-neutral-600);font-variant-numeric:tabular-nums">{{slot.label}}</span>
-          <sc-if value="{{slot.filled}}" hint-placeholder-val="{{false}}">
-            <div style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:16px;margin-top:12px">{{slot.brandName}}</div>
-            <div style="font-size:10px;color:var(--color-neutral-600);margin-top:2px">tap to remove</div>
-          </sc-if>
-          <sc-if value="{{slot.empty}}" hint-placeholder-val="{{true}}">
-            <div style="font-size:10.5px;color:var(--color-neutral-600);text-align:center;padding-top:8px;letter-spacing:.02em">Tap a card</div>
-          </sc-if>
+      <sc-if value="{{isWelcome}}" hint-placeholder-val="{{true}}">
+        <div class="card elev-sm" style="padding:var(--space-6)">
+          <div class="card-kicker">Round-based brand ranking</div>
+          <h1 style="margin-top:var(--space-2)">What actually wins, attribute by attribute.</h1>
+          <p style="opacity:.85;font-size:15px;margin-top:var(--space-3)">You'll go through {{totalRounds}} rounds. Each
+            round names one thing that matters when buying a car in Indonesia — affordability, reliability, aftersales,
+            and so on. You'll pick your top 3 brands for that one thing, in order. Ten brands, {{totalRounds}} rounds,
+            no wrong answers.</p>
+          <button class="btn btn-primary" style="margin-top:var(--space-4)" onClick="{{onStart}}">Start</button>
         </div>
-      </sc-for>
-    </div>
+        <p class="text-muted" style="font-size:12px;margin-top:var(--space-4);line-height:1.6">Your picks are saved
+          anonymously under whatever name or code you enter next. Aggregate results are visible to anyone with this
+          link.</p>
+      </sc-if>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:var(--space-2)">
-      <sc-for list="{{brandCards}}" as="card" hint-placeholder-count="10">
-        <div style="{{card.style}}" onClick="{{card.onClick}}">
-          <span style="font-family:var(--font-heading);font-weight:600;font-size:16px">{{card.name}}</span>
-          <span class="tag tag-outline">{{card.cat}}</span>
-        </div>
-      </sc-for>
-    </div>
-
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:var(--space-6)">
-      <button class="btn btn-secondary" disabled="{{backDisabled}}" aria-disabled="{{backDisabled}}" onClick="{{onBack}}">Back</button>
-      <button class="btn btn-primary" disabled="{{nextDisabled}}" aria-disabled="{{nextDisabled}}" onClick="{{onNext}}">{{nextLabel}}</button>
-    </div>
-  </div>
-</sc-if>
-
-<sc-if value="{{isSubmitting}}" hint-placeholder-val="{{false}}">
-  <div class="card elev-sm" style="padding:var(--space-6)">
-    <p style="font-size:15px">Saving your answers…</p>
-  </div>
-</sc-if>
-
-<sc-if value="{{isSubmitError}}" hint-placeholder-val="{{false}}">
-  <div class="card elev-sm" style="padding:var(--space-6)">
-    <p style="font-size:15px">{{submitErrorMessage}}</p>
-    <button class="btn btn-primary" style="margin-top:var(--space-4)" onClick="{{onRetry}}">Retry</button>
-  </div>
-</sc-if>
-
-<sc-if value="{{isComplete}}" hint-placeholder-val="{{false}}">
-  <div class="card elev-sm" style="padding:var(--space-6)">
-    <div class="card-kicker">Done</div>
-    <h1 style="margin-top:var(--space-2)">Thanks, {{respondentName}}.</h1>
-    <p style="opacity:.85;font-size:15px;margin-top:var(--space-2)">Your {{totalRounds}} rounds are saved. You can view how everyone's answers stack up so far.</p>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:var(--space-5)">
-      <button class="btn btn-secondary" onClick="{{onRestart}}">Take again</button>
-      <button class="btn btn-primary" onClick="{{onSeeResults}}">View results</button>
-    </div>
-  </div>
-</sc-if>
-
-<sc-if value="{{isResults}}" hint-placeholder-val="{{false}}">
-  <sc-if value="{{resultsLoading}}" hint-placeholder-val="{{true}}">
-    <div class="card elev-sm" style="padding:var(--space-6)"><p style="font-size:15px">Loading responses…</p></div>
-  </sc-if>
-  <sc-if value="{{resultsReady}}" hint-placeholder-val="{{false}}">
-    <div class="card elev-sm" style="padding:var(--space-6)">
-      <div class="card-kicker">{{responseCountLabel}}</div>
-      <h2 style="margin-top:var(--space-2)">Leader per attribute</h2>
-      <table class="table" style="margin-top:var(--space-3)">
-        <thead><tr><th>Attribute</th><th>Top 3 (weighted score)</th></tr></thead>
-        <tbody>
-          <sc-for list="{{attrRows}}" as="row" hint-placeholder-count="10">
-            <tr>
-              <td style="font-family:var(--font-heading);font-weight:600;font-size:14.5px">{{row.name}}</td>
-              <td style="font-variant-numeric:tabular-nums;font-size:13px">
-                <sc-for list="{{row.top3}}" as="item" hint-placeholder-count="3">
-                  <span style="{{item.style}}">{{item.sep}}{{item.text}}</span>
-                </sc-for>
-              </td>
-            </tr>
-          </sc-for>
-        </tbody>
-      </table>
-      <button class="btn btn-ghost" style="margin-top:var(--space-4);padding-inline:0" onClick="{{onToggleTable}}">{{toggleTableLabel}}</button>
-      <sc-if value="{{showFullTable}}" hint-placeholder-val="{{false}}">
-        <div style="overflow-x:auto;margin-top:var(--space-3)">
-          <table class="table" style="min-width:640px">
-            <thead>
-              <tr><th>Attribute</th>
-                <sc-for list="{{brandHeaders}}" as="bh" hint-placeholder-count="10">
-                  <th style="font-variant-numeric:tabular-nums">{{bh.name}}</th>
-                </sc-for>
-              </tr>
-            </thead>
-            <tbody>
-              <sc-for list="{{fullTableRows}}" as="row" hint-placeholder-count="10">
-                <tr>
-                  <td style="font-family:var(--font-heading);font-weight:600;font-size:13.5px">{{row.name}}</td>
-                  <sc-for list="{{row.cells}}" as="cell" hint-placeholder-count="10">
-                    <td style="font-variant-numeric:tabular-nums;font-size:13px">{{cell.score}}</td>
-                  </sc-for>
-                </tr>
-              </sc-for>
-            </tbody>
-          </table>
+      <sc-if value="{{isInfo}}" hint-placeholder-val="{{false}}">
+        <div class="card elev-sm" style="padding:var(--space-6)">
+          <div class="card-kicker">Before you begin</div>
+          <h2 style="margin-top:var(--space-2)">What should we call you?</h2>
+          <p style="opacity:.85;font-size:14px;margin-top:var(--space-2)">A first name or initials is enough. This just
+            keeps your set of answers together.</p>
+          <input class="input" type="text" placeholder="e.g. Kenzie, or K.R." maxlength="40"
+            style="margin-top:var(--space-4)" value="{{nameValue}}" onChange="{{onNameInput}}"></input>
+          <div style="display:flex;justify-content:flex-end;margin-top:var(--space-4)">
+            <button class="btn btn-primary" disabled="{{nameContinueDisabled}}" aria-disabled="{{nameContinueDisabled}}"
+              onClick="{{onNameContinue}}">Continue</button>
+          </div>
         </div>
       </sc-if>
-    </div>
 
-    <h2 style="margin:var(--space-8) 0 var(--space-1)">Key strengths by brand</h2>
-    <p style="opacity:.8;font-size:14px;margin-bottom:var(--space-3)">Attributes where a brand leads outright — the strongest candidates for a narrative-driven campaign angle.</p>
-    <sc-if value="{{hasStrengths}}" hint-placeholder-val="{{false}}">
-      <div style="display:flex;flex-direction:column;gap:var(--space-3)">
-        <sc-for list="{{strengthBlocks}}" as="blk" hint-placeholder-count="3">
-          <div class="card" style="padding:var(--space-4)">
-            <h3 style="margin:0 0 var(--space-2)">{{blk.brandName}}</h3>
-            <div style="display:flex;flex-direction:column;gap:4px">
-              <sc-for list="{{blk.items}}" as="it" hint-placeholder-count="3">
-                <div style="font-size:13.5px;opacity:.85">{{it.attrName}} <span class="text-muted" style="font-size:11px;font-variant-numeric:tabular-nums">(led by {{it.marginText}})</span></div>
+      <sc-if value="{{isSurvey}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:var(--space-2)">
+          <div></div>
+          <div class="text-muted" style="font-size:12px;font-variant-numeric:tabular-nums">Round {{roundLabel}}</div>
+        </div>
+        <div style="display:flex;gap:4px;margin-bottom:var(--space-6)">
+          <sc-for list="{{gaugeTicks}}" as="tick" hint-placeholder-count="10">
+            <div style="{{tick.style}}"></div>
+          </sc-for>
+        </div>
+
+        <div class="card elev-sm" style="padding:var(--space-6)">
+          <div class="card-kicker">{{attrName}}</div>
+          <h2 style="margin-top:var(--space-2)">Rank your top 3 brands for this.</h2>
+          <p style="opacity:.85;font-size:14.5px;margin-top:var(--space-2)">{{attrHint}}</p>
+
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-2);margin:var(--space-5) 0">
+            <sc-for list="{{podiumSlots}}" as="slot" hint-placeholder-count="3">
+              <div style="{{slot.style}}" onClick="{{slot.onClick}}">
+                <span
+                  style="position:absolute;top:6px;left:8px;font-size:10px;letter-spacing:.08em;color:var(--color-neutral-600);font-variant-numeric:tabular-nums">{{slot.label}}</span>
+                <sc-if value="{{slot.filled}}" hint-placeholder-val="{{false}}">
+                  <div
+                    style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:16px;margin-top:12px">
+                    {{slot.brandName}}</div>
+                  <div style="font-size:10px;color:var(--color-neutral-600);margin-top:2px">tap to remove</div>
+                </sc-if>
+                <sc-if value="{{slot.empty}}" hint-placeholder-val="{{true}}">
+                  <div
+                    style="font-size:10.5px;color:var(--color-neutral-600);text-align:center;padding-top:8px;letter-spacing:.02em">
+                    Tap a card</div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:var(--space-2)">
+            <sc-for list="{{brandCards}}" as="card" hint-placeholder-count="10">
+              <div style="{{card.style}}" onClick="{{card.onClick}}">
+                <span style="font-family:var(--font-heading);font-weight:600;font-size:16px">{{card.name}}</span>
+                <span class="tag tag-outline">{{card.cat}}</span>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:var(--space-6)">
+            <button class="btn btn-secondary" disabled="{{backDisabled}}" aria-disabled="{{backDisabled}}"
+              onClick="{{onBack}}">Back</button>
+            <button class="btn btn-primary" disabled="{{nextDisabled}}" aria-disabled="{{nextDisabled}}"
+              onClick="{{onNext}}">{{nextLabel}}</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{isSubmitting}}" hint-placeholder-val="{{false}}">
+        <div class="card elev-sm" style="padding:var(--space-6)">
+          <p style="font-size:15px">Saving your answers…</p>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{isSubmitError}}" hint-placeholder-val="{{false}}">
+        <div class="card elev-sm" style="padding:var(--space-6)">
+          <p style="font-size:15px">{{submitErrorMessage}}</p>
+          <button class="btn btn-primary" style="margin-top:var(--space-4)" onClick="{{onRetry}}">Retry</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{isComplete}}" hint-placeholder-val="{{false}}">
+        <div class="card elev-sm" style="padding:var(--space-6)">
+          <div class="card-kicker">Done</div>
+          <h1 style="margin-top:var(--space-2)">Thanks, {{respondentName}}.</h1>
+          <p style="opacity:.85;font-size:15px;margin-top:var(--space-2)">Your {{totalRounds}} rounds are saved. You can
+            view how everyone's answers stack up so far.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:var(--space-5)">
+            <button class="btn btn-secondary" onClick="{{onRestart}}">Take again</button>
+            <button class="btn btn-primary" onClick="{{onSeeResults}}">View results</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{isResults}}" hint-placeholder-val="{{false}}">
+        <sc-if value="{{resultsLoading}}" hint-placeholder-val="{{true}}">
+          <div class="card elev-sm" style="padding:var(--space-6)">
+            <p style="font-size:15px">Loading responses…</p>
+          </div>
+        </sc-if>
+        <sc-if value="{{resultsReady}}" hint-placeholder-val="{{false}}">
+          <div class="card elev-sm" style="padding:var(--space-6)">
+            <div class="card-kicker">{{responseCountLabel}}</div>
+            <h2 style="margin-top:var(--space-2)">Leader per attribute</h2>
+            <table class="table" style="margin-top:var(--space-3)">
+              <thead>
+                <tr>
+                  <th>Attribute</th>
+                  <th>Top 3 (weighted score)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{attrRows}}" as="row" hint-placeholder-count="10">
+                  <tr>
+                    <td style="font-family:var(--font-heading);font-weight:600;font-size:14.5px">{{row.name}}</td>
+                    <td style="font-variant-numeric:tabular-nums;font-size:13px">
+                      <sc-for list="{{row.top3}}" as="item" hint-placeholder-count="3">
+                        <span style="{{item.style}}">{{item.sep}}{{item.text}}</span>
+                      </sc-for>
+                    </td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+            <button class="btn btn-ghost" style="margin-top:var(--space-4);padding-inline:0"
+              onClick="{{onToggleTable}}">{{toggleTableLabel}}</button>
+            <sc-if value="{{showFullTable}}" hint-placeholder-val="{{false}}">
+              <div style="overflow-x:auto;margin-top:var(--space-3)">
+                <table class="table" style="min-width:640px">
+                  <thead>
+                    <tr>
+                      <th>Attribute</th>
+                      <sc-for list="{{brandHeaders}}" as="bh" hint-placeholder-count="10">
+                        <th style="font-variant-numeric:tabular-nums">{{bh.name}}</th>
+                      </sc-for>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <sc-for list="{{fullTableRows}}" as="row" hint-placeholder-count="10">
+                      <tr>
+                        <td style="font-family:var(--font-heading);font-weight:600;font-size:13.5px">{{row.name}}</td>
+                        <sc-for list="{{row.cells}}" as="cell" hint-placeholder-count="10">
+                          <td style="font-variant-numeric:tabular-nums;font-size:13px">{{cell.score}}</td>
+                        </sc-for>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+            </sc-if>
+          </div>
+
+          <h2 style="margin:var(--space-8) 0 var(--space-1)">Key strengths by brand</h2>
+          <p style="opacity:.8;font-size:14px;margin-bottom:var(--space-3)">Attributes where a brand leads outright —
+            the strongest candidates for a narrative-driven campaign angle.</p>
+          <sc-if value="{{hasStrengths}}" hint-placeholder-val="{{false}}">
+            <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+              <sc-for list="{{strengthBlocks}}" as="blk" hint-placeholder-count="3">
+                <div class="card" style="padding:var(--space-4)">
+                  <h3 style="margin:0 0 var(--space-2)">{{blk.brandName}}</h3>
+                  <div style="display:flex;flex-direction:column;gap:4px">
+                    <sc-for list="{{blk.items}}" as="it" hint-placeholder-count="3">
+                      <div style="font-size:13.5px;opacity:.85">{{it.attrName}} <span class="text-muted"
+                          style="font-size:11px;font-variant-numeric:tabular-nums">(led by {{it.marginText}})</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
               </sc-for>
             </div>
-          </div>
-        </sc-for>
-      </div>
-    </sc-if>
-    <sc-if value="{{noStrengths}}" hint-placeholder-val="{{false}}">
-      <p class="text-muted" style="font-size:14px">Not enough data yet.</p>
-    </sc-if>
+          </sc-if>
+          <sc-if value="{{noStrengths}}" hint-placeholder-val="{{false}}">
+            <p class="text-muted" style="font-size:14px">Not enough data yet.</p>
+          </sc-if>
 
-    <p class="text-muted" style="font-size:11.5px;margin-top:var(--space-6);line-height:1.6">Scoring: rank 1 = 3 pts, rank 2 = 2 pts, rank 3 = 1 pt, summed across respondents. With a pool this size (target n=6), treat margins under 2–3 points as noise, not signal — use this to shortlist directional strengths, not to publish as statistically significant.</p>
-  </sc-if>
-</sc-if>
+          <p class="text-muted" style="font-size:11.5px;margin-top:var(--space-6);line-height:1.6">Scoring: rank 1 = 3
+            pts, rank 2 = 2 pts, rank 3 = 1 pt, summed across respondents. With a pool this size (target n=6), treat
+            margins under 2–3 points as noise, not signal — use this to shortlist directional strengths, not to publish
+            as statistically significant.</p>
+        </sc-if>
+      </sc-if>
 
-</div>
+    </div>
 
-</x-dc>
-<script type="text/x-dc" data-dc-script>
+  </x-dc>
+  <script type="text/x-dc" data-dc-script>
 const ATTRIBUTES = [
   {id:'afford', name:'Affordability', hint:'Which brand gives the most car for the money?'},
   {id:'reliab', name:'Reliability', hint:'Jarang rewel, jarang masuk bengkel.'},
@@ -447,4 +489,5 @@ class Component extends DCLogic {
 
 </script>
 </body>
+
 </html>
